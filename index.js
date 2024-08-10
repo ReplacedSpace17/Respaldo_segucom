@@ -114,7 +114,7 @@ const performBackup = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('30 16 * * *', async () => {
+cron.schedule('34 16 * * *', async () => {
     await performBackup();
 });
 
