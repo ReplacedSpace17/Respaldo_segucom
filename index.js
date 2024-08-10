@@ -115,7 +115,7 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('47 14 * * *', async () => {
+cron.schedule('34 14 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
     await backupImages();
     await backupDatabase();
