@@ -5,22 +5,23 @@ const { exec } = require('child_process');
 
 // Configuración del servidor remoto
 const remoteUser = 'sermex-segu2';
-const remoteHost = '192.168.1.69';
-const remotePort = 22;
-const remoteBackupDir = '/home/sermex-segu2/RESPALDOS_REGUCOM';
+const remoteHost = 'segubackend.com';
+const remotePort = 4040;
+const remoteBackupDir = '/home/sermex-segu2/RESPALDOS';
 const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 
 // Array de rutas de carpetas de origen (donde están las imágenes)
 const sourceDirs = [
     '/home/sermex-segu/BackendSegucom/uploads',
-    '/home/sermex-segu/Segucom_Comunication/MediaContent'
+    '/home/sermex-segu/Segucom_Comunication/MediaContent',
+    //'/home/rs17/Documentos/Segucom/Segucom_Backend/uploads',
     // Puedes agregar más rutas aquí
 ];
 
 // Ruta de la carpeta de destino para las imágenes
-const backupDir = '/home/sermex-segu2/RESPALDOS_REGUCOM/MEDIA';
+const backupDir = '/home/sermex-segu2/RESPALDOS/MEDIA';
 // Ruta de la carpeta de destino para la base de datos
-const backupDirsql = '/home/sermex-segu2/RESPALDOS_REGUCOM/DATABASE';
+const backupDirsql = '/home/sermex-segu2/RESPALDOS/DATABASE';
 
 // Función para realizar el respaldo de imágenes
 const backupImages = async () => {
@@ -114,7 +115,7 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('28 13 * * *', async () => {
+cron.schedule('47 14 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
     await backupImages();
     await backupDatabase();
