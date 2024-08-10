@@ -12,6 +12,7 @@
   "dependencies": {
     "fs-extra": "^11.2.0",
     "mysql": "^2.18.1",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "progress-stream": "^2.0.0"
   }
 }
