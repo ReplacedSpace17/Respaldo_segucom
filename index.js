@@ -18,9 +18,9 @@ const sourceDirs = [
 ];
 
 // Ruta de la carpeta de destino para las imágenes
-const backupDir = '/home/rs17/Documentos/Segucom/temporal/RESPALDO/MEDIA';
+const backupDir = '/home/sermex-segu2/RESPALDOS_REGUCOM/MEDIA';
 // Ruta de la carpeta de destino para la base de datos
-const backupDirsql = '/home/rs17/Documentos/Segucom/temporal/RESPALDO/DATABASE';
+const backupDirsql = '/home/sermex-segu2/RESPALDOS_REGUCOM/DATABASE';
 
 // Función para realizar el respaldo de imágenes
 const backupImages = async () => {
@@ -114,7 +114,7 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('01 13 * * *', async () => {
+cron.schedule('02 13 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
     await backupImages();
     await backupDatabase();
