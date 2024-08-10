@@ -12,7 +12,7 @@ const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 
 // Array de rutas de carpetas de origen (donde están las imágenes)
 const sourceDirs = [
-    '/home/sermex-segu/BackendSegucom/uploads ',
+    '/home/sermex-segu/BackendSegucom/uploads',
     '/home/sermex-segu/Segucom_Comunication/MediaContent'
     // Puedes agregar más rutas aquí
 ];
@@ -114,7 +114,7 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('25 13 * * *', async () => {
+cron.schedule('26 13 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
     await backupImages();
     await backupDatabase();
