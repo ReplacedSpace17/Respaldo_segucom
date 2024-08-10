@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const cron = require('node-cron');
 const { exec } = require('child_process');
-const progressStream = require('progress-stream');
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
@@ -28,16 +27,16 @@ const copyRemoteDirectories = async () => {
         // Copiar los archivos de cada carpeta de origen desde el servidor remoto
         for (const sourceDir of sourceDirs) {
             const targetDir = path.join(backupDir, path.basename(sourceDir));
-            const command = `sshpass -p ${remotePassword} scp -r -P ${remotePort} ${remoteUser}@${remoteHost}:${sourceDir} ${targetDir}`;
+            const command = `sshpass -p ${remotePassword} rsync -avz --progress -e "ssh -p ${remotePort}" ${remoteUser}@${remoteHost}:${sourceDir}/ ${targetDir}`;
 
             console.log(`Iniciando copia de ${sourceDir}...`);
 
-            exec(command, { maxBuffer: 1024 * 500 }, (error, stdout, stderr) => {
+            exec(command, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error al copiar ${sourceDir}:`, error);
                     return;
                 }
-                
+
                 // Mostrar la salida estándar
                 console.log(stdout);
 
@@ -55,7 +54,7 @@ const copyRemoteDirectories = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('11 16 * * *', async () => {
+cron.schedule('15 16 * * *', async () => {
     console.log('Iniciando copia de directorios desde el servidor remoto...');
     await copyRemoteDirectories();
 });
