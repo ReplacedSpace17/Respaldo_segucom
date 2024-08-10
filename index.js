@@ -15,7 +15,13 @@ const sourceDirs = [
     '/home/sermex-segu/Segucom_Comunication/MediaContent',
 ];
 
-// Ruta de la carpeta de destino en el servidor de respaldo
+// Array de bases de datos a respaldar
+const databases = [
+    { name: 'segucomm_mms', fileName: 'backup_segucomm_mms.sql' },
+    { name: 'segucomm_db', fileName: 'backup_segucomm_db.sql' }
+];
+
+// Ruta de la carpeta de destino en el servidor local para los respaldos
 const backupDir = '/home/sermex-segu2/RESPALDOS';
 
 // Función para copiar las carpetas del servidor remoto
@@ -55,28 +61,21 @@ const copyRemoteDirectories = async () => {
     }
 };
 
-// Función para realizar el respaldo de la base de datos en el servidor remoto y transferirlo
-const backupAndTransferDatabases = async () => {
-    const databases = [
-        { name: 'segucomm_mms', fileName: 'backup_segucomm_mms.sql' },
-        { name: 'segucomm_db', fileName: 'backup_segucomm_db.sql' }
-    ];
-
+// Función para realizar el respaldo de las bases de datos
+const backupDatabases = async () => {
     // Asegurarse de que la carpeta de respaldo existe
     await fs.ensureDir(backupDir);
 
     // Cambiar la contraseña de la base de datos
     const dbPassword = 's3guC0m@7am'; // Nueva contraseña para las bases de datos
 
-    // Respaldar y transferir cada base de datos
+    // Respaldar cada base de datos
     for (const db of databases) {
         const { name, fileName } = db;
         const localBackupFile = path.join(backupDir, fileName);
 
         // Comando para respaldar la base de datos
         const backupCommand = `mysqldump -u ${remoteUser} -p${dbPassword} ${name} > ${localBackupFile}`;
-        // Comando para transferir el archivo de respaldo al servidor remoto
-        const transferCommand = `sshpass -p ${remotePassword} scp -P ${remotePort} ${localBackupFile} ${remoteUser}@${remoteHost}:${backupDir}`;
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
 
@@ -95,16 +94,6 @@ const backupAndTransferDatabases = async () => {
             }
 
             console.log(`Respaldo de la base de datos ${name} realizado en: ${localBackupFile}`);
-
-            // Transferir el archivo de respaldo al servidor remoto
-            exec(transferCommand, (error) => {
-                if (error) {
-                    console.error(`Error al transferir el respaldo de la base de datos ${name}:`, error);
-                    return;
-                }
-
-                console.log(`Respaldo de la base de datos ${name} transferido a ${remoteHost}:${backupDir}`);
-            });
         });
     }
 };
@@ -113,13 +102,13 @@ const backupAndTransferDatabases = async () => {
 const performBackup = async () => {
     console.log('Iniciando copia de directorios desde el servidor remoto...');
     await copyRemoteDirectories();
-    
-    console.log('Iniciando respaldo y transferencia de bases de datos...');
-    await backupAndTransferDatabases();
+
+    console.log('Iniciando respaldo de bases de datos...');
+    await backupDatabases();
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('40 16 * * *', async () => {
+cron.schedule('56 16 * * *', async () => {
     await performBackup();
 });
 
