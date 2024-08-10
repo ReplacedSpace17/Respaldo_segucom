@@ -29,7 +29,7 @@ const copyRemoteDirectories = async () => {
             const targetDir = path.join(backupDir, path.basename(sourceDir)); // Crear un subdirectorio para cada origen
 
             // Comando para copiar usando rsync y sobrescribir
-            const command = `sshpass -p ${remotePassword} rsync -avz --delete --progress -e "ssh -p ${remotePort}" ${remoteUser}@${remoteHost}:${sourceDir}/ ${targetDir}`;
+            const command = `sshpass -p ${remotePassword} rsync -avz --delete --progress -e "ssh -p ${remotePort}" ${remoteUser}@${remoteHost}:${sourceDir}/ ${targetDir}/`;
 
             console.log(`Iniciando copia de ${sourceDir}...`);
 
@@ -114,7 +114,7 @@ const performBackup = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('21 16 * * *', async () => {
+cron.schedule('30 16 * * *', async () => {
     await performBackup();
 });
 
