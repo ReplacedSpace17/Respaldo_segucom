@@ -1,4 +1,3 @@
-const { NodeSSH } = require('node-ssh');
 const fs = require('fs-extra');
 const path = require('path');
 const cron = require('node-cron');
@@ -15,6 +14,7 @@ const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 const sourceDirs = [
     '/home/sermex-segu/BackendSegucom/uploads',
     '/home/sermex-segu/Segucom_Comunication/MediaContent',
+    //'/home/rs17/Documentos/Segucom/Segucom_Backend/uploads',
     // Puedes agregar más rutas aquí
 ];
 
@@ -22,35 +22,6 @@ const sourceDirs = [
 const backupDir = '/home/sermex-segu2/RESPALDOS/MEDIA';
 // Ruta de la carpeta de destino para la base de datos
 const backupDirsql = '/home/sermex-segu2/RESPALDOS/DATABASE';
-
-// Función para conectarse al servidor remoto y preparar la carpeta de respaldo
-const prepareRemoteBackupDir = async () => {
-    const ssh = new NodeSSH();
-    
-    try {
-        await ssh.connect({
-            host: remoteHost,
-            username: remoteUser,
-            port: remotePort,
-            password: remotePassword // Asegúrate de manejar las contraseñas de manera segura
-        });
-        console.log('Conexión SSH establecida con éxito.');
-
-        // Verificar si la carpeta de respaldo existe
-        const backupDirCommand = `if [ ! -d "${remoteBackupDir}" ]; then mkdir -p ${remoteBackupDir}; fi`;
-        await ssh.execCommand(backupDirCommand);
-        console.log(`Carpeta de respaldo '${remoteBackupDir}' verificada o creada con éxito.`);
-
-        // Borrar el contenido de la carpeta de respaldo si existe
-        await ssh.execCommand(`rm -rf ${remoteBackupDir}/*`);
-        console.log(`Contenido de la carpeta '${remoteBackupDir}' eliminado con éxito.`);
-        
-    } catch (error) {
-        console.error('Error al conectarse a SSH o manejar la carpeta de respaldo:', error);
-    } finally {
-        ssh.dispose(); // Cerrar la conexión
-    }
-};
 
 // Función para realizar el respaldo de imágenes
 const backupImages = async () => {
@@ -144,13 +115,12 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('29 15 * * *', async () => {
+cron.schedule('47 14 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
-    await prepareRemoteBackupDir(); // Preparar la carpeta de respaldo en el servidor remoto
-    await backupImages(); // Realizar el respaldo de imágenes
-    await backupDatabase(); // Realizar el respaldo de la base de datos
-    await backupCommunicationDatabase(); // Realizar el respaldo de la base de datos de comunicación
-    await transferImages(); // Llamar a la función para transferir las imágenes al servidor remoto
+    await backupImages();
+    await backupDatabase();
+    await backupCommunicationDatabase();
+    await transferImages(); // Llama a la función para transferir las imágenes al servidor remoto
 });
 
 console.log('El servicio de respaldo está activo.');
