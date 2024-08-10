@@ -41,12 +41,12 @@ sudo nano /etc/systemd/system/respaldoSegucom.service
 
 -----------------------------------------
 [Unit]
-Description=Backend Segucom Node.js Application
+Description=Respaldo Segucom Node.js Application
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /home/sermex-segu/BackendSegucom/index.js
-WorkingDirectory=/home/sermex-segu/BackendSegucom
+ExecStart=/usr/bin/node /home/sermex-segu/Respaldo_segucom/index.js
+WorkingDirectory=/home/sermex-segu/Respaldo_segucom
 Restart=always
 User=sermex-segu
 Group=sermex-segu
@@ -62,4 +62,9 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 sudo systemctl enable respaldoSegucom
 sudo systemctl start respaldoSegucom
+sudo systemctl stop respaldoSegucom
+sudo systemctl restart respaldoSegucom
 sudo systemctl status respaldoSegucom
+
+
+/home/sermex-segu/Respaldo_segucom/index.js

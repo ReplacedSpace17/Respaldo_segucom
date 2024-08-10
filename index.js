@@ -4,15 +4,16 @@ const cron = require('node-cron');
 const { exec } = require('child_process');
 
 // Configuración del servidor remoto
-const remoteUser = 'sermex-segu';
-const remoteHost = 'segubackend.com';
+const remoteUser = 'sermex-segu2';
+const remoteHost = '192.168.1.69';
 const remotePort = 22;
-const remoteBackupDir = '/home/sermex-segu/RESPALDOS';
+const remoteBackupDir = '/home/sermex-segu2/RESPALDOS_REGUCOM';
 const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 
 // Array de rutas de carpetas de origen (donde están las imágenes)
 const sourceDirs = [
-    '/home/rs17/Documentos/Segucom/Segucom_Comunication/MediaContent',
+    '/home/sermex-segu/BackendSegucom/uploads ',
+    '/home/sermex-segu/Segucom_Comunication/MediaContent'
     // Puedes agregar más rutas aquí
 ];
 
