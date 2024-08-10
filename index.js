@@ -65,12 +65,17 @@ const backupAndTransferDatabases = async () => {
     // Asegurarse de que la carpeta de respaldo existe
     await fs.ensureDir(backupDir);
 
+    // Cambiar la contraseña de la base de datos
+    const dbPassword = 's3guC0m@7am'; // Nueva contraseña para las bases de datos
+
     // Respaldar y transferir cada base de datos
     for (const db of databases) {
         const { name, fileName } = db;
         const localBackupFile = path.join(backupDir, fileName);
 
-        const backupCommand = `mysqldump -u ${remoteUser} -p${remotePassword} ${name} > ${localBackupFile}`;
+        // Comando para respaldar la base de datos
+        const backupCommand = `mysqldump -u ${remoteUser} -p${dbPassword} ${name} > ${localBackupFile}`;
+        // Comando para transferir el archivo de respaldo al servidor remoto
         const transferCommand = `sshpass -p ${remotePassword} scp -P ${remotePort} ${localBackupFile} ${remoteUser}@${remoteHost}:${backupDir}`;
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
@@ -114,7 +119,7 @@ const performBackup = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('34 16 * * *', async () => {
+cron.schedule('39 16 * * *', async () => {
     await performBackup();
 });
 

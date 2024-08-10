@@ -45,11 +45,11 @@ Description=Respaldo Segucom Node.js Application
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/node /home/sermex-segu/Respaldo_segucom/index.js
-WorkingDirectory=/home/sermex-segu/Respaldo_segucom
+ExecStart=/usr/bin/node /home/sermex-segu2/Respaldo_segucom/index.js
+WorkingDirectory=/home/sermex-segu2/Respaldo_segucom
 Restart=always
-User=sermex-segu
-Group=sermex-segu
+User=sermex-segu2
+Group=segucom
 Environment=PATH=/usr/bin:/usr/local/bin
 Environment=NODE_ENV=production
 # Si estás usando pm2, el comando sería algo como:
