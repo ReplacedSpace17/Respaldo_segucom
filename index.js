@@ -4,7 +4,7 @@ const cron = require('node-cron');
 const { exec } = require('child_process');
 
 // Configuración del servidor remoto
-const remoteUser = 'sermex-segu2';
+const remoteUser = 'sermex-segu';
 const remoteHost = '192.168.1.69';
 const remotePort = 22;
 const remoteBackupDir = '/home/sermex-segu2/RESPALDOS_REGUCOM';
@@ -114,7 +114,7 @@ const transferImages = () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('15 13 * * *', async () => {
+cron.schedule('21 13 * * *', async () => {
     console.log('Iniciando respaldo de imágenes y bases de datos...');
     await backupImages();
     await backupDatabase();
