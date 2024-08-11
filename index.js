@@ -22,7 +22,7 @@ const databases = [
 ];
 
 // Ruta de la carpeta de destino en el servidor local para los respaldos
-const backupDir = '/home/sermex-segu2/RESPALDOS';
+const backupDir = '/home/sermex-segu2/Respaldo_segucom';
 
 // Función para copiar las carpetas del servidor remoto
 const copyRemoteDirectories = async () => {
@@ -75,7 +75,7 @@ const backupDatabases = async () => {
         const localBackupFile = path.join(backupDir, fileName);
 
         // Comando para respaldar la base de datos
-        const backupCommand = `mysqldump -u ${remoteUser} -p${dbPassword} ${name} > ${localBackupFile}`;
+        const backupCommand = `mariadb-dump -u segucomm_admin -p's3guC0m@7am' -h ${remoteHost} ${name} --skip-ssl > ${localBackupFile}`;
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
 
@@ -108,7 +108,7 @@ const performBackup = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('00 03 * * *', async () => {
+cron.schedule('44 19 * * *', async () => {
     await performBackup();
 });
 
