@@ -23,6 +23,18 @@ const databases = [
 
 // Ruta de la carpeta de destino en el servidor local para los respaldos
 const backupDir = '/home/sermex-segu2/RESPALDOS';
+const logFile = path.join(backupDir, 'logsBackup.txt'); // Ruta del archivo de logs
+
+// Función para registrar la fecha y hora en el archivo de logs
+const logBackupTime = (message) => {
+    const timestamp = new Date().toISOString();
+    const logMessage = `${timestamp} - ${message}\n`;
+    fs.appendFile(logFile, logMessage, (err) => {
+        if (err) {
+            console.error('Error al escribir en el archivo de logs:', err);
+        }
+    });
+};
 
 // Función para copiar las carpetas del servidor remoto
 const copyRemoteDirectories = async () => {
@@ -61,6 +73,7 @@ const copyRemoteDirectories = async () => {
             });
         }
         console.log('Todas las copias de directorios han finalizado.'); // Mensaje de finalización
+        logBackupTime('Finalizada la copia de directorios'); // Log de finalización
     } catch (err) {
         console.error('Error al realizar la copia de directorios remotos:', err);
     }
@@ -104,8 +117,10 @@ const backupDatabases = async () => {
                 resolve(); // Indica que este respaldo ha terminado
             });
         });
+        logBackupTime(`Finalizado el respaldo de la base de datos ${name}`); // Log de finalización
     }
     console.log('Todos los respaldos de bases de datos han finalizado.'); // Mensaje de finalización
+    logBackupTime('Finalizados todos los respaldos de bases de datos'); // Log de finalización general
 };
 
 // Función principal que combina la copia de directorios y el respaldo de bases de datos
@@ -116,10 +131,11 @@ const performBackup = async () => {
     console.log('Iniciando respaldo de bases de datos...');
     await backupDatabases();
     console.log('Copia de seguridad completada.'); // Mensaje de finalización general
+    logBackupTime('Copia de seguridad completada'); // Log de finalización general
 };
 
-// Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('55 19 * * *', async () => {
+// Programar la tarea para que se ejecute cada minuto
+cron.schedule('* * * * *', async () => {
     await performBackup();
 });
 
