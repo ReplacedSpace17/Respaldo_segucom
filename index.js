@@ -26,9 +26,11 @@ const backupDir = '/home/sermex-segu2/RESPALDOS';
 const logFile = path.join(backupDir, 'logsBackup.txt'); // Ruta del archivo de logs
 
 // Función para registrar la fecha y hora en el archivo de logs
-const logBackupTime = (message) => {
-    const timestamp = new Date().toISOString();
-    const logMessage = `${timestamp} - ${message}\n`;
+const logBackupTime = (operation) => {
+    const timestamp = new Date();
+    const date = timestamp.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
+    const time = timestamp.toTimeString().split(' ')[0]; // Hora en formato HH:MM:SS
+    const logMessage = `${date}, ${time}, ${operation}\n`;
     fs.appendFile(logFile, logMessage, (err) => {
         if (err) {
             console.error('Error al escribir en el archivo de logs:', err);
@@ -41,6 +43,7 @@ const copyRemoteDirectories = async () => {
     try {
         // Asegurarse de que la carpeta de respaldo existe
         await fs.ensureDir(backupDir);
+        logBackupTime('Copia de seguridad iniciada');
 
         // Copiar los archivos de cada carpeta de origen desde el servidor remoto
         for (const sourceDir of sourceDirs) {
@@ -73,7 +76,7 @@ const copyRemoteDirectories = async () => {
             });
         }
         console.log('Todas las copias de directorios han finalizado.'); // Mensaje de finalización
-        logBackupTime('Finalizada la copia de directorios'); // Log de finalización
+        logBackupTime('Respaldo de directorios completado'); // Log de finalización
     } catch (err) {
         console.error('Error al realizar la copia de directorios remotos:', err);
     }
@@ -117,8 +120,14 @@ const backupDatabases = async () => {
                 resolve(); // Indica que este respaldo ha terminado
             });
         });
-        logBackupTime(`Finalizado el respaldo de la base de datos ${name}`); // Log de finalización
+
+        if (name === 'segucomm_db') {
+            logBackupTime('Respaldo de BD_ Segucomm_db completado'); // Log de finalización para esta base de datos
+        } else if (name === 'segucomm_mms') {
+            logBackupTime('Respaldo de BD_ Segucomm_mms completado'); // Log de finalización para esta base de datos
+        }
     }
+
     console.log('Todos los respaldos de bases de datos han finalizado.'); // Mensaje de finalización
     logBackupTime('Finalizados todos los respaldos de bases de datos'); // Log de finalización general
 };
