@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const cron = require('node-cron');
 const { exec } = require('child_process');
+const { formatInTimeZone } = require('date-fns-tz'); // Importar date-fns-tz
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
@@ -28,8 +29,9 @@ const logFile = path.join(backupDir, 'logsBackup.txt'); // Ruta del archivo de l
 // Función para registrar la fecha y hora en el archivo de logs
 const logBackupTime = (operation) => {
     const timestamp = new Date();
-    const date = timestamp.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
-    const time = timestamp.toTimeString().split(' ')[0]; // Hora en formato HH:MM:SS
+    const timeZone = 'America/Mexico_City'; // Cambia esto a tu zona horaria deseada
+    const date = formatInTimeZone(timestamp, timeZone, 'yyyy-MM-dd'); // Fecha en formato YYYY-MM-DD
+    const time = formatInTimeZone(timestamp, timeZone, 'HH:mm:ss'); // Hora en formato HH:MM:SS
     const logMessage = `${date}, ${time}, ${operation}\n`;
     fs.appendFile(logFile, logMessage, (err) => {
         if (err) {
