@@ -39,23 +39,28 @@ const copyRemoteDirectories = async () => {
 
             console.log(`Iniciando copia de ${sourceDir}...`);
 
-            exec(command, (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`Error al copiar ${sourceDir}:`, error);
-                    return;
-                }
+            await new Promise((resolve, reject) => {
+                exec(command, (error, stdout, stderr) => {
+                    if (error) {
+                        console.error(`Error al copiar ${sourceDir}:`, error);
+                        reject(error);
+                        return;
+                    }
 
-                // Mostrar la salida estándar
-                console.log(stdout);
+                    // Mostrar la salida estándar
+                    console.log(stdout);
 
-                // Mostrar errores si los hay
-                if (stderr) {
-                    console.error(stderr);
-                }
+                    // Mostrar errores si los hay
+                    if (stderr) {
+                        console.error(stderr);
+                    }
 
-                console.log(`Copia de ${sourceDir} realizada en: ${targetDir}`);
+                    console.log(`Copia de ${sourceDir} realizada en: ${targetDir}`);
+                    resolve(); // Indica que esta copia ha terminado
+                });
             });
         }
+        console.log('Todas las copias de directorios han finalizado.'); // Mensaje de finalización
     } catch (err) {
         console.error('Error al realizar la copia de directorios remotos:', err);
     }
@@ -79,23 +84,28 @@ const backupDatabases = async () => {
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
 
-        exec(backupCommand, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error al realizar el respaldo de la base de datos ${name}:`, error);
-                return;
-            }
+        await new Promise((resolve, reject) => {
+            exec(backupCommand, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error al realizar el respaldo de la base de datos ${name}:`, error);
+                    reject(error);
+                    return;
+                }
 
-            // Mostrar la salida estándar
-            console.log(stdout);
+                // Mostrar la salida estándar
+                console.log(stdout);
 
-            // Mostrar errores si los hay
-            if (stderr) {
-                console.error(stderr);
-            }
+                // Mostrar errores si los hay
+                if (stderr) {
+                    console.error(stderr);
+                }
 
-            console.log(`Respaldo de la base de datos ${name} realizado en: ${localBackupFile}`);
+                console.log(`Respaldo de la base de datos ${name} realizado en: ${localBackupFile}`);
+                resolve(); // Indica que este respaldo ha terminado
+            });
         });
     }
+    console.log('Todos los respaldos de bases de datos han finalizado.'); // Mensaje de finalización
 };
 
 // Función principal que combina la copia de directorios y el respaldo de bases de datos
@@ -105,6 +115,7 @@ const performBackup = async () => {
 
     console.log('Iniciando respaldo de bases de datos...');
     await backupDatabases();
+    console.log('Copia de seguridad completada.'); // Mensaje de finalización general
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
