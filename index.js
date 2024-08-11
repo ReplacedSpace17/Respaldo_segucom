@@ -22,7 +22,7 @@ const databases = [
 ];
 
 // Ruta de la carpeta de destino en el servidor local para los respaldos
-const backupDir = '/home/sermex-segu2/Respaldo_segucom';
+const backupDir = '/home/sermex-segu2/RESPALDOS';
 
 // Función para copiar las carpetas del servidor remoto
 const copyRemoteDirectories = async () => {
@@ -108,7 +108,7 @@ const performBackup = async () => {
 };
 
 // Programar la tarea para que se ejecute diariamente a las 11:18 PM
-cron.schedule('46 19 * * *', async () => {
+cron.schedule('55 19 * * *', async () => {
     await performBackup();
 });
 
