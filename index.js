@@ -165,8 +165,8 @@ const performBackup = async () => {
     console.log('Iniciando respaldo de bases de datos...');
     await backupDatabases();
 
-  //  console.log('Iniciando copia de directorios desde el servidor remoto...');
-//    await copyRemoteDirectories();
+  console.log('Iniciando copia de archivos desde el servidor remoto...');
+   await copyRemoteDirectories();
 
     console.log('Copia de seguridad completada.'); // Mensaje de finalización general
     logBackupTime('Copia de seguridad completada'); // Log de finalización general
@@ -179,8 +179,8 @@ cron.schedule('0 3 * * *', async () => {
     await performBackup();
 });
 */
-// Programar la tarea para que se ejecute cada 2 minutos test
-cron.schedule('*/2 * * * *', async () => {
+// Programar la tarea para que se ejecute cada 2 minutos test */2 * * * *
+cron.schedule('0 3 * * *', async () => {
     try {
         // Obtener la IP pública de manera asíncrona y asignarla a remoteHost
         const ip = await getPublicIP();
