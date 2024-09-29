@@ -147,9 +147,16 @@ const performBackup = async () => {
 
 // Programar la tarea para que se ejecute cada minuto
 // Programar la tarea para que se ejecute a las 3 a.m. todos los días
+/*
 cron.schedule('0 3 * * *', async () => {
     await performBackup();
 });
+*/
+// Programar la tarea para que se ejecute cada 2 minutos test
+cron.schedule('*/2 * * * *', async () => {
+    await performBackup();
+});
+
 
 
 console.log('El servicio de copia y respaldo de bases de datos está activo.');
