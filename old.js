@@ -5,8 +5,8 @@ const { exec } = require('child_process');
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
-//const remoteHost = '189.162.181.25';
-const remoteHost = 'segubackend.com';
+const remoteHost = '189.162.181.25';
+//const remoteHost = 'segubackend.com';
 const remotePort = 22;
 const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 
