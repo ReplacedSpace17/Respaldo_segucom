@@ -181,16 +181,19 @@ cron.schedule('0 3 * * *', async () => {
 */
 // Programar la tarea para que se ejecute cada 2 minutos test
 cron.schedule('*/2 * * * *', async () => {
-    getPublicIP()
-    .then(ip => {
+    try {
+        // Obtener la IP pública de manera asíncrona y asignarla a remoteHost
+        const ip = await getPublicIP();
         remoteHost = ip;
-        console.log('Tu dirección IP pública es:', remoteHost);
-    })
-    .catch(err => {
-        console.error(err);
-    });
-    //await performBackup();
+        console.log('La dirección IP pública es:', remoteHost);
+
+        // Ejecutar el respaldo después de obtener la IP pública
+        await performBackup();
+    } catch (err) {
+        console.error('Error al obtener la IP pública:', err);
+    }
 });
+
 
 
 
