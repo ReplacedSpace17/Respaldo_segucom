@@ -86,6 +86,7 @@ const copyRemoteDirectories = async () => {
 };
 
 // Función para realizar el respaldo de las bases de datos
+// Función para realizar el respaldo de las bases de datos
 const backupDatabases = async () => {
     // Asegurarse de que la carpeta de respaldo existe
     await fs.ensureDir(backupDir);
@@ -98,8 +99,8 @@ const backupDatabases = async () => {
         const { name, fileName } = db;
         const localBackupFile = path.join(backupDir, fileName);
 
-        // Comando para respaldar la base de datos
-        const backupCommand = `mariadb-dump -u segucomm_admin -p's3guC0m@7am' -h ${remoteHost} ${name} --skip-ssl > ${localBackupFile}`;
+        // Comando para respaldar la base de datos usando mysqldump
+        const backupCommand = `mysqldump -u segucomm_admin -p'${dbPassword}' -h ${remoteHost} --column-statistics=0 ${name} | pv > ${localBackupFile}`;
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
 
@@ -124,16 +125,14 @@ const backupDatabases = async () => {
             });
         });
 
-        if (name === 'segucomm_db') {
-            logBackupTime('Respaldo de BD_ Segucomm_db completado'); // Log de finalización para esta base de datos
-        } else if (name === 'segucomm_mms') {
-            logBackupTime('Respaldo de BD_ Segucomm_mms completado'); // Log de finalización para esta base de datos
-        }
+        // Registrar el respaldo completado en el log
+        logBackupTime(`Respaldo de BD_${name} completado`);
     }
 
     console.log('Todos los respaldos de bases de datos han finalizado.'); // Mensaje de finalización
     logBackupTime('Finalizados todos los respaldos de bases de datos'); // Log de finalización general
 };
+
 
 // Función principal que combina la copia de directorios y el respaldo de bases de datos
 const performBackup = async () => {
