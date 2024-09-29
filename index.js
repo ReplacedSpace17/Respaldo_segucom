@@ -5,7 +5,8 @@ const { exec } = require('child_process');
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
-const remoteHost = 'segubackend.com';
+const remoteHost = '189.162.181.25';
+//const remoteHost = 'segubackend.com';
 const remotePort = 22;
 const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
 
@@ -136,11 +137,14 @@ const backupDatabases = async () => {
 
 // Función principal que combina la copia de directorios y el respaldo de bases de datos
 const performBackup = async () => {
-    console.log('Iniciando copia de directorios desde el servidor remoto...');
-    await copyRemoteDirectories();
+
 
     console.log('Iniciando respaldo de bases de datos...');
     await backupDatabases();
+
+  //  console.log('Iniciando copia de directorios desde el servidor remoto...');
+//    await copyRemoteDirectories();
+
     console.log('Copia de seguridad completada.'); // Mensaje de finalización general
     logBackupTime('Copia de seguridad completada'); // Log de finalización general
 };
