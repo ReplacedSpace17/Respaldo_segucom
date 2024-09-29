@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const cron = require('node-cron');
 const { exec } = require('child_process');
+const https = require('https');
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
@@ -27,6 +28,29 @@ const backupDir = '/home/sermex-segu2/RESPALDOS';
 const logFile = path.join(backupDir, 'logsBackup.txt'); // Ruta del archivo de logs
 
 const moment = require('moment-timezone');
+
+
+const getPublicIP = () => {
+    return new Promise((resolve, reject) => {
+        https.get('https://api.ipify.org?format=json', (res) => {
+            let data = '';
+
+            // Recibir fragmentos de datos
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // Al final de la respuesta
+            res.on('end', () => {
+                const ipInfo = JSON.parse(data);
+                resolve(ipInfo.ip);
+            });
+        }).on('error', (err) => {
+            reject('Error al obtener la IP pública:', err);
+        });
+    });
+};
+
 
 // Función para registrar la fecha y hora en el archivo de logs
 const logBackupTime = (operation) => {
@@ -157,7 +181,27 @@ cron.schedule('0 3 * * *', async () => {
 */
 // Programar la tarea para que se ejecute cada 2 minutos test
 cron.schedule('*/2 * * * *', async () => {
-    await performBackup();
+    const getPublicIP = () => {
+        return new Promise((resolve, reject) => {
+            https.get('https://api.ipify.org?format=json', (res) => {
+                let data = '';
+    
+                // Recibir fragmentos de datos
+                res.on('data', (chunk) => {
+                    data += chunk;
+                });
+    
+                // Al final de la respuesta
+                res.on('end', () => {
+                    const ipInfo = JSON.parse(data);
+                    resolve(ipInfo.ip);
+                });
+            }).on('error', (err) => {
+                reject('Error al obtener la IP pública:', err);
+            });
+        });
+    };
+    //await performBackup();
 });
 
 
