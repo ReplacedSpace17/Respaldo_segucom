@@ -6,7 +6,7 @@ const https = require('https');
 
 // Configuración del servidor remoto (servidor 1)
 const remoteUser = 'sermex-segu';
-const remoteHost = '189.162.181.25';
+let remoteHost = 'd';
 //const remoteHost = 'segubackend.com';
 const remotePort = 22;
 const remotePassword = 'S3rs6uc0'; // Contraseña para la conexión SSH
@@ -183,7 +183,8 @@ cron.schedule('0 3 * * *', async () => {
 cron.schedule('*/2 * * * *', async () => {
     getPublicIP()
     .then(ip => {
-        console.log('Tu dirección IP pública es:', ip);
+        remoteHost = ip;
+        console.log('Tu dirección IP pública es:', remoteHost);
     })
     .catch(err => {
         console.error(err);
