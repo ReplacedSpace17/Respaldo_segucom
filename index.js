@@ -100,7 +100,8 @@ const backupDatabases = async () => {
         const localBackupFile = path.join(backupDir, fileName);
 
         // Comando para respaldar la base de datos usando mysqldump
-        const backupCommand = `mysqldump -u segucomm_admin -p'${dbPassword}' -h ${remoteHost} --column-statistics=0 ${name} | pv > ${localBackupFile}`;
+        // Agregando la opción -p para mostrar el progreso
+        const backupCommand = `mysqldump -u segucomm_admin -p'${dbPassword}' -h ${remoteHost} --column-statistics=0 ${name} | pv -p -t -e -s $(mysqldump --no-data -u segucomm_admin -p'${dbPassword}' -h ${remoteHost} ${name} | wc -c) > ${localBackupFile}`;
 
         console.log(`Iniciando respaldo de la base de datos ${name}...`);
 
@@ -132,7 +133,6 @@ const backupDatabases = async () => {
     console.log('Todos los respaldos de bases de datos han finalizado.'); // Mensaje de finalización
     logBackupTime('Finalizados todos los respaldos de bases de datos'); // Log de finalización general
 };
-
 
 // Función principal que combina la copia de directorios y el respaldo de bases de datos
 const performBackup = async () => {
