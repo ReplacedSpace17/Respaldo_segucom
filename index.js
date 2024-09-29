@@ -156,7 +156,7 @@ cron.schedule('0 3 * * *', async () => {
 });
 */
 // Programar la tarea para que se ejecute cada 2 minutos test
-cron.schedule('*/3 * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
     await performBackup();
 });
 
