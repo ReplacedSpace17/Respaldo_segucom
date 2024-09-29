@@ -181,26 +181,13 @@ cron.schedule('0 3 * * *', async () => {
 */
 // Programar la tarea para que se ejecute cada 2 minutos test
 cron.schedule('*/2 * * * *', async () => {
-    const getPublicIP = () => {
-        return new Promise((resolve, reject) => {
-            https.get('https://api.ipify.org?format=json', (res) => {
-                let data = '';
-    
-                // Recibir fragmentos de datos
-                res.on('data', (chunk) => {
-                    data += chunk;
-                });
-    
-                // Al final de la respuesta
-                res.on('end', () => {
-                    const ipInfo = JSON.parse(data);
-                    resolve(ipInfo.ip);
-                });
-            }).on('error', (err) => {
-                reject('Error al obtener la IP pública:', err);
-            });
-        });
-    };
+    getPublicIP()
+    .then(ip => {
+        console.log('Tu dirección IP pública es:', ip);
+    })
+    .catch(err => {
+        console.error(err);
+    });
     //await performBackup();
 });
 
