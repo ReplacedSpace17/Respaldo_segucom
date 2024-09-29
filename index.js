@@ -85,7 +85,7 @@ const copyRemoteDirectories = async () => {
     }
 };
 
-// Función para realizar el respaldo de las bases de datos
+
 // Función para realizar el respaldo de las bases de datos
 const backupDatabases = async () => {
     // Asegurarse de que la carpeta de respaldo existe
@@ -156,7 +156,7 @@ cron.schedule('0 3 * * *', async () => {
 });
 */
 // Programar la tarea para que se ejecute cada 2 minutos test
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/3 * * * *', async () => {
     await performBackup();
 });
 
